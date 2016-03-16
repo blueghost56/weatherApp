@@ -3,11 +3,12 @@ package com.ways.os.entity;
 /**
  * Created by wwzy on 16/3/15.
  */
-public class Weather{
+public class Weather extends XModel{
     private String province; //省
     private String city;//市
     private String cityCode;//城市代码
     private String cityPicture;//城市图片
+    private String lastUpdateTime;//最后更新时间
     private String temperature;//气温
     private String condition;//概况
     private String wind;//风向和风力
@@ -57,6 +58,14 @@ public class Weather{
 
     public void setCityPicture(String cityPicture) {
         this.cityPicture = cityPicture;
+    }
+
+    public String getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(String lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 
     public String getTemperature() {

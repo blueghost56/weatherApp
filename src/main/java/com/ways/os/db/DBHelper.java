@@ -31,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     private  String makeCreateTableSQL(Class<?>klass,String tableName){
         Field[] fields=klass.getDeclaredFields();
-          String sql=String.format("CREATE TABLE %s (_id integer primary key auto_increment,",tableName);
+          String sql=String.format("CREATE TABLE %s (_id integer primary key autoincrement,",tableName);
 
          StringBuilder sb=new StringBuilder(sql);
          for(Field field:fields){

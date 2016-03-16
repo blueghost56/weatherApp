@@ -1,7 +1,5 @@
 package com.ways.os.db;
 
-import android.net.Uri;
-
 /**
  * Created by wwzy on 16/3/15.
  */
@@ -15,11 +13,38 @@ public  class WeatherContract {
 
     public final static  String TABLE_NAME="WAYS_WEATHER";
 
+    public static  final String[] fields={
+            WeatherContract.PROVINCE_F,
+            WeatherContract.CITY_F,
+            WeatherContract.CITYCODE_F,
+            WeatherContract.CITYPICTURE_F,
+            WeatherContract.LASTUPDATE_F,
+            WeatherContract.TEMPERATURE_F,
+            WeatherContract.CONDITION_F,
+            WeatherContract.WIND_F,
+            WeatherContract.TRENDIMAGE10_F,
+            WeatherContract.TRENDIMAGE11_F,
+            WeatherContract.LIVE_F,
+            WeatherContract.LIFEINDEX_F,
+            WeatherContract.TEMPERATURE2_F,
+            WeatherContract.CONDITION2_F,
+            WeatherContract.WIND2_F,
+            WeatherContract.TRENDIMAGE20_F,
+            WeatherContract.TRENDIMAGE21_F,
+            WeatherContract.TEMPERATURE3_F,
+            WeatherContract.CONDITION3_F,
+            WeatherContract.WIND3_F,
+            WeatherContract.TRENDIMAGE30_F,
+            WeatherContract.TRENDIMAGE31_F,
+            WeatherContract.HISTORY_F
+    };
+
     public final static  String  ID_F="_id";
     public final static  String PROVINCE_F="province"; //省
     public final static  String CITY_F="city";//市
     public final static  String CITYCODE_F="cityCode";//城市代码
     public final static  String CITYPICTURE_F="cityPicture";//城市图片
+    public final static  String LASTUPDATE_F="lastUpdateTime";//最后更新时间
     public final static  String TEMPERATURE_F="temperature";//气温
     public final static  String CONDITION_F="condition";//概况
     public final static  String WIND_F="wind";//风向和风力

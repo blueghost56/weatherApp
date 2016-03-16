@@ -29,7 +29,7 @@ public class WeatherProvider extends ContentProvider {
     public final static String CONTENT_TYPE="vnd.android.cursor.dir/";
     public final static String CONTENT_TYPE_ITEM="vnd.android.cursor.item/";
 
-    public final static Uri CONTENT_URI=android.net.Uri.parse("content://"+AUTHORITIES+"/"+ WeatherContract.TABLE_NAME);
+    public final static Uri CONTENT_URI=android.net.Uri.parse("content://"+AUTHORITIES+"/item");
 
 
     public static final UriMatcher uriMatcher;
