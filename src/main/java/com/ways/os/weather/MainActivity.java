@@ -1,33 +1,98 @@
 package com.ways.os.weather;
 
+import android.app.FragmentTransaction;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.baidu.location.Poi;
+import com.ways.os.entity.Weather;
 import com.ways.os.location.LocationManager;
+import com.ways.os.xhttpclient.Post;
+import com.ways.os.xhttpclient.StringBody;
+import com.ways.os.xhttpclient.XHttpClient;
+import com.ways.os.xhttpclient.XResponse;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Set;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks,BDLocationListener{
-   private LocationManager mLocationManger;
+
+
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks,BDLocationListener,View.OnClickListener{
+
+    private final static String CONFIGURE="weather_default";
+    private final static String HOST_CITY="host_city";
+    private final static String CITY_NAME="city_name";
+    private final static String CACH_DATA="cach_data";
+
+    private final static  int LOADMANAGER_ID=0;
+
+    private LocationManager mLocationManger=null;
+
+    private boolean hasHostCity=false;
+    private Set<String> cityNames=null;
+    private boolean hasCacheData=false;
+
+    private FloatingActionButton mFloatingActionButton;
+    private static WeatherFragment mWeatherFragment;
+    private static CityFragment mCityFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+         //初始数据
           init();
     }
 
     private void init(){
-       mLocationManger=new LocationManager(getApplicationContext(),this);
+       mFloatingActionButton=(FloatingActionButton)findViewById(R.id.fab_weather);
+        mFloatingActionButton.setOnClickListener(this);
+
+
+       SharedPreferences mSharedPerences=getSharedPreferences(CONFIGURE,Context.MODE_PRIVATE);
+
+        hasHostCity=mSharedPerences.getBoolean(HOST_CITY, false);
+        cityNames=mSharedPerences.getStringSet(CITY_NAME, null);
+        hasCacheData=mSharedPerences.getBoolean(CACH_DATA, false);
+
+         if(!hasHostCity||cityNames==null){
+             mLocationManger=new LocationManager(getApplicationContext(),this);
+             return;
+         }
+
+
     }
+    private  void initFragment(){
+        mCityFragment=new CityFragment();
+        mWeatherFragment=new WeatherFragment();
+
+        Bundle argments=new Bundle();
+       mWeatherFragment.setArguments(argments);
+
+       FragmentTransaction ft=getFragmentManager().beginTransaction();
+
+        ft.add(R.id.layout_container, mWeatherFragment);
+
+        //ft.setCustomAnimations(R.anim.fragment_open_enter,R.anim.fragment_open_exit,R.anim.fragment_popenter,R.anim.fragment_popexit);
+        ft.addToBackStack(null);
+        ft.commit();
+
+
+    }
+
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
@@ -37,12 +102,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onResume(){
         super.onResume();
-        mLocationManger.startLocation();
+        if(mLocationManger!=null) {
+            mLocationManger.startLocation();
+        }
     }
     @Override
     public void onPause(){
         super.onPause();
-        mLocationManger.stopLocation();
+        if(mLocationManger!=null) {
+            mLocationManger.stopLocation();
+        }
     }
 
     @Override
@@ -59,63 +128,47 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onReceiveLocation(BDLocation location) {
         //定位到的结果
-        StringBuffer sb = new StringBuffer(256);
-        sb.append("time : ");
-        sb.append(location.getTime());
-        sb.append("\nerror code : ");
-        sb.append(location.getLocType());
-        sb.append("\nlatitude : ");
-        sb.append(location.getLatitude());
-        sb.append("\nlontitude : ");
-        sb.append(location.getLongitude());
-        sb.append("\nradius : ");
-        sb.append(location.getRadius());
-        if (location.getLocType() == BDLocation.TypeGpsLocation){// GPS定位结果
-            sb.append("\nspeed : ");
-            sb.append(location.getSpeed());// 单位：公里每小时
-            sb.append("\nsatellite : ");
-            sb.append(location.getSatelliteNumber());
-            sb.append("\nheight : ");
-            sb.append(location.getAltitude());// 单位：米
-            sb.append("\ndirection : ");
-            sb.append(location.getDirection());// 单位度
-            sb.append("\naddr : ");
-            sb.append(location.getAddrStr());
-            sb.append("\ndescribe : ");
-            sb.append("gps定位成功");
+        String currentCity=location.getCity();
+        currentCity=currentCity.substring(0,currentCity.length()-1);
+        new WeatherTask().execute(currentCity);
 
-        } else if (location.getLocType() == BDLocation.TypeNetWorkLocation){// 网络定位结果
-            sb.append("\naddr : ");
-            sb.append(location.getAddrStr());
-            //运营商信息
-            sb.append("\noperationers : ");
-            sb.append(location.getOperators());
-            sb.append("\ndescribe : ");
-            sb.append("网络定位成功");
-        } else if (location.getLocType() == BDLocation.TypeOffLineLocation) {// 离线定位结果
-            sb.append("\ndescribe : ");
-            sb.append("离线定位成功，离线定位结果也是有效的");
-        } else if (location.getLocType() == BDLocation.TypeServerError) {
-            sb.append("\ndescribe : ");
-            sb.append("服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因");
-        } else if (location.getLocType() == BDLocation.TypeNetWorkException) {
-            sb.append("\ndescribe : ");
-            sb.append("网络不同导致定位失败，请检查网络是否通畅");
-        } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
-            sb.append("\ndescribe : ");
-            sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
-        }
-        sb.append("\nlocationdescribe : ");
-        sb.append(location.getLocationDescribe());// 位置语义化信息
-        List<Poi> list = location.getPoiList();// POI数据
-        if (list != null) {
-            sb.append("\npoilist size = : ");
-            sb.append(list.size());
-            for (Poi p : list) {
-                sb.append("\npoi= : ");
-                sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
-            }
-        }
-        Log.i("BaiduLocationApiDem", sb.toString());
     }
+
+    @Override
+    public void onClick(View v) {
+        FragmentTransaction ft=getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.fragment_open_exit,R.anim.fragment_open_enter);
+        ft.replace(R.id.layout_container, mCityFragment);
+        ft.commit();
+    }
+
+    class WeatherTask extends AsyncTask<String,Void,Weather>{
+        private XHttpClient mClient;
+        public WeatherTask() {
+
+            mClient=new XHttpClient();
+        }
+
+
+        @Override
+        public Weather doInBackground(String... params) {
+            HashMap<String,String> param=new HashMap<>();
+            param.put("theCityName",params[0]);
+            try {
+                Post mPost = new Post.Builder()
+                        .url("http://ws.webxml.com.cn/WebServices/WeatherWebService.asmx/getWeatherbyCityName")
+                        .body(new StringBody(param))
+                        .create();
+                XResponse response = mClient.newRequest(mPost).run();
+                String strContent=response.body().string();
+                Log.i(">>>>>>>>>>>>>>>>>>>>>>:",strContent);
+            }catch (IOException ioe){
+                ioe.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
+
 }

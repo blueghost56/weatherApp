@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Post implements XRequest{
     private XResponse response;
     public Post(){
-
+       response=new XResponse();
     }
 
     @Override

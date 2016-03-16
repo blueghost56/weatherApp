@@ -2,7 +2,6 @@ package com.ways.os.location;
 
 import android.content.Context;
 
-import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -23,7 +22,7 @@ public class LocationManager {
         LocationClientOption option=new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
-        int span=1000;
+        int span=0;
         option.setScanSpan(span);
         option.setIsNeedAddress(true);
         option.setOpenGps(true);

@@ -22,5 +22,13 @@
 
       </com.ways.os.view.WeatherLayout>
 
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_weather"
+        android:layout_gravity="bottom|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:src="@android:drawable/ic_dialog_email"
+        />
 </android.support.design.widget.CoordinatorLayout>
