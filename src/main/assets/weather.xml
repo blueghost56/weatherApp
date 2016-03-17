@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Weather>
+    <item name="cloudy">
+        <image>cloudy.gif</image>
+        <sound>cloudy.mp3</sound>
+    </item>
+    <item name="lighting">
+        <image>lighting.gif</image>
+        <sound>lighting.mp3</sound>
+    </item>
+    <item name="raining">
+        <image>raining.gif</image>
+        <sound>raining.mp3</sound>
+    </item>
+    <item name="cloudy">
+        <image>cloudy.gif</image>
+        <sound>cloudy.mp3</sound>
+    </item>
+</Weather>

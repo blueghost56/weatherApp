@@ -36,13 +36,13 @@ public class WebBrowser extends WebView {
         if(weather==null)return;
         String image=parserWeather(weather);
        javaScriptInterface.setBackgroundImage(image);
+        loadUrl("javascript:changeBackground('"+image+"')");
 
-        loadUrl("javascript:changeBackground('')");
     }
 
     private  static  String parserWeather(Weather weather){
      String condition=weather.getCondition();
-
+     
      return "raining.gif";
     }
 
