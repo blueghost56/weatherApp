@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Weather>
     <item name="cloudy">
-        <image>cloudy.gif</image>
-        <sound>cloudy.mp3</sound>
+        cloudy.gif-cloudy.mp3
     </item>
     <item name="lighting">
-        <image>lighting.gif</image>
-        <sound>lighting.mp3</sound>
+        lighting.gif-lighting.mp3
     </item>
     <item name="raining">
-        <image>raining.gif</image>
-        <sound>raining.mp3</sound>
+        raining.gif-raining.mp3
     </item>
     <item name="cloudy">
-        <image>cloudy.gif</image>
-        <sound>cloudy.mp3</sound>
+        cloudy.gif-cloudy.mp3
     </item>
 </Weather>

@@ -10,6 +10,11 @@ import android.webkit.WebViewClient;
 
 import com.ways.os.entity.Weather;
 import com.ways.os.helper.MediaManager;
+import com.ways.os.helper.WeatherCondition;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 /**
  * Created by csl on 16/3/17.
@@ -34,15 +39,22 @@ public class WebBrowser extends WebView {
 
     public void setBackgroundImage(Weather weather){
         if(weather==null)return;
-        String image=parserWeather(weather);
-       javaScriptInterface.setBackgroundImage(image);
+        String image= null;
+        try {
+            image = parserWeather(getContext(),weather);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        javaScriptInterface.setBackgroundImage(image);
         loadUrl("javascript:changeBackground('"+image+"')");
 
     }
 
-    private  static  String parserWeather(Weather weather){
+    private  static  String parserWeather(Context context,Weather weather) throws IOException, XmlPullParserException {
      String condition=weather.getCondition();
-     
+       new WeatherCondition(context).parser(condition);
      return "raining.gif";
     }
 
