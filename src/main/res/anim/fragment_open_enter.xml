@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Before rotating, immediately set the alpha to 0. -->
-    <objectAnimator
-        android:valueFrom="1.0"
-        android:valueTo="0.0"
-        android:propertyName="alpha"
-        android:duration="0" />
-
-    <!-- Rotate. -->
-    <objectAnimator
-        android:valueFrom="1.0"
-        android:valueTo="0.0"
-        android:propertyName="scaleY"
-        android:interpolator="@android:interpolator/accelerate_decelerate"
-        android:duration="1000" />
-
-    <objectAnimator
-        android:valueFrom="1.0"
-        android:valueTo="0.0"
-        android:propertyName="scaleX"
-        android:interpolator="@android:interpolator/accelerate_decelerate"
-        android:duration="1000" />
-    <!-- Half-way through the rotation (see startOffset), set the alpha to 1. -->
-    <objectAnimator
-        android:valueFrom="0.0"
-        android:valueTo="1.0"
-        android:propertyName="alpha"
-        android:startOffset="@android:integer/config_mediumAnimTime"
-        android:duration="1" />
+    <scale
+        android:duration="500"
+        android:fromXScale="0.5"
+        android:toXScale="1.0"
+        android:fromYScale="0.5"
+        android:toYScale="1.0"
+        android:fillEnabled="true"
+        android:fillBefore="true"
+        android:fillAfter="true"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        />
+    <alpha
+        android:duration="500"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        />
 </set>

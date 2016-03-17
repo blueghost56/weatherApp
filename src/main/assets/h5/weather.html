@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+ <head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style type="text/css">
+   body{
+   background-size: 100%;
+   background-repeat: no-repeat;
+   }
+  </style>
+  <script>
+
+   window.onload=function(){
+     var gifImage=Android.getBackgroundImage()
+       document.body.style.backgroundImage="url("+gifImage+")"
+   };
+   function changeBackground(gifImage){
+       document.body.style.backgroundImage="url("+gifImage+")"
+    }
+  </script>
+ </head>
+<body>
+
+</body>
+</html>

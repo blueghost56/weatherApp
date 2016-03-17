@@ -1,28 +1,35 @@
 package com.ways.os.weather;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.ways.os.entity.BundleTranser;
+import com.ways.os.helper.LoaderManager;
 import com.ways.os.location.LocationManager;
 import com.ways.os.task.WeatherTask;
+import com.ways.os.view.WebBrowser;
 
 
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallBack,BDLocationListener,View.OnClickListener{
 
-public class MainActivity extends AppCompatActivity implements BDLocationListener,View.OnClickListener{
-
-    private final static  int LOADMANAGER_ID=0;
+    private final static  String HTML_PATH="file:///android_asset/h5/weather.html";
 
     private LocationManager mLocationManger=null;
 
+
     private FloatingActionButton mFloatingActionButton;
+    public WebBrowser mWebView;
+
+
     private static WeatherFragment mWeatherFragment;
     private static CityFragment mCityFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,23 +45,30 @@ public class MainActivity extends AppCompatActivity implements BDLocationListene
     private void init(){
        mFloatingActionButton=(FloatingActionButton)findViewById(R.id.fab_weather);
         mFloatingActionButton.setOnClickListener(this);
-        mLocationManger=new LocationManager(getApplicationContext(),this);
 
+        mWebView=(WebBrowser)findViewById(R.id.web_view_back);
+        mWebView.loadUrl(HTML_PATH);
+
+        new LoaderManager(this).initLoader(this);
     }
-    private  void initFragment(){
+
+
+
+    private  void initFragment(BundleTranser bundleTranser){
         mCityFragment=new CityFragment();
         mWeatherFragment=new WeatherFragment();
 
-        Bundle argments=new Bundle();
-       mWeatherFragment.setArguments(argments);
+        Bundle arguments=new Bundle();
+         arguments.putSerializable(WeatherFragment.BUNDLE,bundleTranser);
 
-       FragmentTransaction ft=getFragmentManager().beginTransaction();
+       mWeatherFragment.setArguments(arguments);
+
+       FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
 
         ft.add(R.id.layout_container, mWeatherFragment);
 
         ft.addToBackStack(null);
         ft.commit();
-
 
     }
 
@@ -85,11 +99,26 @@ public class MainActivity extends AppCompatActivity implements BDLocationListene
 
     @Override
     public void onClick(View v) {
-        FragmentTransaction ft=getFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.fragment_open_exit,R.anim.fragment_open_enter);
+        FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.fragment_open_enter,R.anim.fragment_open_exit);
         ft.replace(R.id.layout_container, mCityFragment);
         ft.commit();
     }
 
+    @Override
+    public void onLoaderBefore() {
 
+    }
+
+    @Override
+    public void onLoaderFinished(BundleTranser bundleTranser) {
+
+        if(bundleTranser.getSerializables().size()==0) {
+            mLocationManger = new LocationManager(getApplicationContext(), this);
+            mLocationManger.startLocation();
+          return;
+        }
+        initFragment(bundleTranser);
+
+    }
 }

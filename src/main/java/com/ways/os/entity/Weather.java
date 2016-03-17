@@ -1,9 +1,11 @@
 package com.ways.os.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by wwzy on 16/3/15.
  */
-public class Weather extends XModel{
+public class Weather extends XModel implements Serializable{
     private String province; //省
     private String city;//市
     private String cityCode;//城市代码
