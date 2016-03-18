@@ -10,6 +10,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by csl on 16/3/17.
@@ -27,6 +29,8 @@ public final class WeatherCondition {
         XmlPullParser xmlPullParser= XmlPullParserFactory.newInstance().newPullParser();
         xmlPullParser.setInput(inputStream,"UTF-8");
         int eventType=xmlPullParser.getEventType();
+        Set<String> bundleSet=new HashSet<>();
+
          while(eventType!=XmlPullParser.END_DOCUMENT){
             String name=xmlPullParser.getName();
              if(eventType==XmlPullParser.START_TAG){
@@ -36,14 +40,25 @@ public final class WeatherCondition {
              }else if(eventType==XmlPullParser.END_TAG){
                 if(BUNDLE_TAG.equals(name)){
 
-
                 }
 
              }else if(eventType==XmlPullParser.TEXT){
-               DebugUtils.dlog(TAG,xmlPullParser.getText());
+                 String bundle=xmlPullParser.getText();
+
+                 bundleSet.add(bundle);
              }
 
              eventType=xmlPullParser.next();
          }
+
+        DebugUtils.dlog(TAG,bundleSet.toString());
+
+         for(String bundle : bundleSet){
+            String[] items=bundle.split("-");
+
+
+         }
+
+
     }
 }

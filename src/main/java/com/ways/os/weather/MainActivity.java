@@ -87,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mWebView.removeAllViews();
+        mWebView.destroy();
+        mWebView=null;
+    }
+
 
     @Override
     public void onReceiveLocation(BDLocation location) {

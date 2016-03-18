@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.ways.os.entity.Weather;
 
 /**
- * Created by wwzy on 16/3/16.
+ * Created by csl on 16/3/16.
  */
 public class WeatherItemFragment extends Fragment {
     public final static String BUNDLE_ITEM="bundle_item";

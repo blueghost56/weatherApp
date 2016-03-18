@@ -52,6 +52,8 @@ public class WebBrowser extends WebView {
 
     }
 
+
+
     private  static  String parserWeather(Context context,Weather weather) throws IOException, XmlPullParserException {
      String condition=weather.getCondition();
        new WeatherCondition(context).parser(condition);

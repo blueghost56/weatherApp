@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Weather>
-    <item name="cloudy">
-        cloudy.gif-cloudy.mp3
-    </item>
-    <item name="lighting">
-        lighting.gif-lighting.mp3
-    </item>
-    <item name="raining">
-        raining.gif-raining.mp3
-    </item>
-    <item name="cloudy">
-        cloudy.gif-cloudy.mp3
-    </item>
+    <item>云-cloudy.gif-cloudy.mp3</item>
+    <item>电-lighting.gif-lighting.mp3</item>
+    <item>雨-raining.gif-raining.mp3</item>
 </Weather>
